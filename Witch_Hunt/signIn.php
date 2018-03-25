@@ -19,18 +19,28 @@
       if ($result->num_rows > 0) {
         $_SESSION["username"] = $user;
         $_SESSION["password"] = $pass;
-        $con->Close();
         //$page = file_get_contents("list.php");
         //echo $page;
         //include("list.php");
-        echo "Username: " . $_SESSION["username"] . "<br>";
-        echo "Password: " . $_SESSION["password"] . "<br><br>";
+
+        $insert = "INSERT INTO game_data (username, isWitch, isDead, villagerVotes, isWitchesVictim) VALUES ('" . $_SESSION['username'] . "', '0', '0', '0', '0');";
+        if ($con->query($insert)) {
+          //Display the player's data from DB
+          echo "Username: " . $_SESSION["username"] . "<br>";
+          echo "Password: " . $_SESSION["password"] . "<br><br>";
+
+          //Players will be pushed into a queue... or match if one is available
+          echo '<form id="make_make" action="vote.php" method="get">
+            <fieldset>
+              <button type="submit" name="Game_Button">Join a match!</button>
+            </fieldset>
+          </form>';
+        } else {
+          echo "Couldn't add you to the game.";
+        }
       }
     }
-
-    //Players will be pushed into a queue... or match if one is available
-    echo '<button type="submit" name="Game_Button" action="game">Click here to join a match!</button>';
-
+    $con->Close();
     ?>
 
     <!-- (php statement)
