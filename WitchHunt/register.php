@@ -26,10 +26,10 @@
             $conn->Close();
             //$page = file_get_contents("list.php");
             //echo $page;
-            //$_SESSION["username"] = $username;
-            //$_SESSION["password"] = $password;
+            //$_SESSION["username"] = $user;
+            //$_SESSION["password"] = $pass;
             //include("list.php");
-            echo "You registered!!"
+            echo "You registered (click back to sign in)!!";
           } else {
             echo "Query didn't work.";
             $conn->Close();

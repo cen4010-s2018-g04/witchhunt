@@ -6,6 +6,7 @@
   </head>
   <body>
     <?php
+    //Handles Signing Users In
 
     $user = $_GET["username"];
     $pass = $_GET["password"];
@@ -22,9 +23,26 @@
         //$page = file_get_contents("list.php");
         //echo $page;
         //include("list.php");
-        echo "You signed in!!";
+        echo "Username: " . $_SESSION["username"] . "<br>";
+        echo "Password: " . $_SESSION["password"] . "<br><br>";
       }
     }
+
+    //Players will be pushed into a queue... or match if one is available
+    echo '<button type="submit" name="Game_Button" action="game">Click here to join a match!</button>';
+
     ?>
+
+    <!-- (php statement)
+    //Matches users with other players (timeout test)
+
+    /*$time = 0;
+    while($time < 30) {
+      usleep(1000000);
+      $time++;
+      echo "$time <br>";
+    }
+    echo "Timeout";*/
+    -->
   </body>
 </html>
