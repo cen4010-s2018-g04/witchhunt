@@ -1,3 +1,9 @@
+<?php 
+require_once './includes/config.php'; 
+
+// This checks to make sure user is logged in, and redirects to index.php if not
+require_once './includes/logged_in.php'; 
+?>
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,11 +12,9 @@
   <body>
     <?php
 
-    //DB connection
-    $con = new mysqli("localhost", "CEN4010_S2018g04", "cen4010_s2018", "CEN4010_S2018g04");
     //Show players that aren't dead and don't show the player
-    $statement = "SELECT * FROM game_data WHERE isDead = 0 AND username != " . $_SESSION['username'] . ";";
-    if (!$result = $con->query($statement)) {
+    $statement = "SELECT * FROM game_data INNER JOIN users ON user_id = user_id_f WHERE isDead = 0 AND user_id_f != " . $user_id . ";";
+    if (!$result = $sqlcon->query($statement)) {
       echo "Error fetching game data!";
     } else {
       if ($result->num_rows > 0) {
@@ -22,8 +26,8 @@
         echo '<form id="vote" action="results.php" method="get">';
         echo "<div>";
         while($rowItem = mysqli_fetch_array($result)){
-          echo '<input type="radio" name="vote" value="'. $rowItem['username'] .'" id="'. $rowItem['username'] .'">';
-          echo '<label for="'.$rowItem['username'].'">'.$rowItem['username'].'</label>';
+          echo '<input type="radio" name="vote" value="'. $rowItem['user_id'] .'" id="'. $rowItem['user_id'] .'">';
+          echo '<label for="'.$rowItem['user_id'].'">'.$rowItem['username'].'</label>';
         }
         echo "</div>";
         echo "<div>";
@@ -49,6 +53,8 @@
   <div>
     <button type="submit">Submit</button>
   </div>*/
+      }else{
+          echo "<h4>not enough players.</h4>";
       }
     }
     ?>
