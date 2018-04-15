@@ -11,10 +11,10 @@ require_once './includes/logged_in.php';
     <title>Witch Hunt - Matchmaking</title>
   </head>
   <body>
-    <a href="waiting.php">Join a Public Game</a>
-    <br/>
-    <a href="FindGame.php">Join a private game</a>
-    <br/>
-    <a href="privateGame.php">Create a private game</a>
+    <form id="Game" action="add_to_private_wait.php" method="POST">
+      Game Name: <input type="text" name="game_name" value="Name your game"/>
+      <br/>
+      <input type="submit" value="Join Game"/>
+    </form>
   </body>
 </html>
