@@ -18,7 +18,7 @@ require_once './includes/logged_in.php';
     } else {
       if ($result->num_rows > 0) {
         //echo ""
-        echo "Sucess!"
+        echo "Sucess!";
       }
     }
     ?>
