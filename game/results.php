@@ -80,6 +80,8 @@ require_once './includes/logged_in.php';
 		echo '<form action="home.php">';
 		echo '<input type="submit" value="Continue">';
 		echo '</form>';	
+   }else{
+       echo '<h3>Error! Did not pass the other if statements.</h3>'
    }
    }//big else end
   ?>
