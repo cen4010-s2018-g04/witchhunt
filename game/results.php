@@ -34,7 +34,7 @@ require_once './includes/logged_in.php';
   $dead=$deadman["max(vote)"];
   $killVote='UPDATE game_players SET alive=0 WHERE vote='.$dead.' and id='.$gameID.';';
   $sqlcon->query($killVote);
-  $checkWitch='SELECT * FROM game_players WHERE witch=1 and alive=1 and id'.$gameID.';';
+  $checkWitch='SELECT * FROM game_players WHERE witch=1 and alive=1 and id='.$gameID.';';
   $testWin=$sqlcon->query($checkWitch);
   //if witch is alive
   if ($testWin && $testWin->num_rows>0){//if1 start
