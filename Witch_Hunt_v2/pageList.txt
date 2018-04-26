@@ -1,0 +1,14 @@
+sign-up (home)
+login
+game join/create
+witch or villager
+chat
+vote
+death or who dies
+end-game
+
+Extra
+Rules(how to Play)
+Terms and Conditions
+privacy policy
+
