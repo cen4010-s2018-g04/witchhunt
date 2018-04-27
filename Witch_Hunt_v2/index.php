@@ -26,8 +26,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
-        $sql = "SELECT user_id, username, password FROM users WHERE username = ?";
-        
+        $sql = "SELECT user_id, username, password FROM Users WHERE username = ?";
+
         if($stmt = mysqli_prepare($sqlcon, $sql)){
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "s", $param_username);
@@ -64,10 +64,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
             }
+            // Close statement
+            mysqli_stmt_close($stmt);
+        }else{
+            echo "ERROR LOGGING IN.";
         }
         
-        // Close statement
-        mysqli_stmt_close($stmt);
+
     }
     
     // Close connection

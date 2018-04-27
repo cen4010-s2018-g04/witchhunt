@@ -191,7 +191,7 @@ function PlayersInGame($game_id){
     try {
         $query = 'SELECT game_id, game_name, alive, username, user_id FROM GamePlayers
                   INNER JOIN Games ON Games.game_id = GamePlayers.game_id_f
-                  INNER JOIN users On users.user_id = GamePlayers.user_id_f
+                  INNER JOIN Users On Users.user_id = GamePlayers.user_id_f
                   WHERE game_id_f='.(int)$game_id;
 
         if (!$result2 = $sqlcon->query($query)){
