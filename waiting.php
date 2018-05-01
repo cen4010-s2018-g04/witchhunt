@@ -52,22 +52,26 @@ require_once 'logged_in.php';
     $numInGames = count($resultArray);
     if ($numInGames==0) {
         $inPublic=isPlayerInQueue(0, $user_id, true);
-        if ((int)$inPublic==1) {
-            echo '<button class="btn" id="newPublicGame">Wait in Public Queue</button>';
-        }else{
-            echo '<button class="btn" id="newPublicGame">Join a Public Game</button>';
-        }
-        ?>
-        <br />
+       
     
     <div class="container">
         <br><br><br><br><br>
         <h1>Witch Hunt</h1><br>
             
-           <h1> <button class="btn" id="joinPrivateGame">Join a Private Game</button><br />
-            <br>
-        
-            <button class="btn" id="newPrivateGame">Create a Private Game</button><br /></h1>
+           <h1>
+             if ((int)$inPublic==1) {
+                echo '<button class="btn" id="newPublicGame">Wait in Public Queue</button>';
+            }else{
+                echo '<button class="btn" id="newPublicGame">Join a Public Game</button>';
+            }
+            ?>
+            <br />
+
+            <button class="btn" id="joinPrivateGame">Join a Private Game</button><br />
+                <br>
+
+                <button class="btn" id="newPrivateGame">Create a Private Game</button><br />
+        </h1>
     <?php
     }else{
         echo '<h3>You are already joined to a current game.</h3>';
