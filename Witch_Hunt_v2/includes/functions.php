@@ -113,7 +113,85 @@ function doesPrivateGameExist($user_id){
     }
     return $retval;
 }
+function getGamebyCode($game_code){
+    global $sqlcon;
+    $retval=0;
+    try {
+        if ($stmt = $sqlcon->prepare("SELECT game_id FROM Games WHERE Game_Code=? LIMIT 1")) {
 
+            $stmt->bind_param('s', $game_code);
+            $stmt->execute();
+            $stmt->bind_result($retval);
+
+            /* fetch value */
+            $stmt->fetch();
+
+            /* close statement and connection */
+            $stmt->close();
+        } else {
+            echo "ERROR!";
+        }
+    }//end try
+    catch (Exception $e) {
+        echo $e->getMessage();
+    }
+    return $retval;
+}
+function createPrivateGame($game_name, $user_id, $numplayers){
+    global $sqlcon;
+    $retval=0;
+    $game_code = "";
+    try {
+        $game_code =  RandCharGen(8);
+        if ($stmt = $sqlcon->prepare("INSERT INTO Games
+                    (Game_Name, Game_Code, creator_id_f, numplayers)
+                      VALUES (? ,?, ?, ?)")) {
+            $stmt->bind_param('isii', $game_id, $game_code, $user_id, $numplayers);
+
+            $stmt->execute();
+
+            $game_id = $sqlcon->insert_id;
+            $numrows = $stmt->affected_rows;
+            $public=false;
+            if ($numrows > 0){
+                // Add this same user into the game queue for this private game
+                addToPlayerQueue($game_id, $user_id, $numplayers, $public);
+                // Set the session for game_id;
+                $_SESSION['game_id'] = $game_id;
+            }
+
+
+            /* close statement and connection */
+            $stmt->close();
+        }
+    }//end try
+    catch (Exception $e){
+        echo $e->getMessage();
+    }
+    return $game_code;
+}
+function getNumPlayersinGame($game_id){
+    global $sqlcon;
+    $retval=0;
+    try {
+        $query = 'SELECT numplayers FROM Games
+                  WHERE game_id='.(int)$game_id;
+
+        if (!$result = $sqlcon->query($query)){
+            $data= "error counting game!";
+        }else if ($result->num_rows > 0){
+            if ($result->num_rows>0){
+                $data=$result->fetch_assoc();
+                $retval=(int)$data['numplayers'];
+            }
+        }
+
+    }//end try
+    catch (Exception $e){
+        echo $e->getMessage();
+    }
+    return $retval;
+}
 function getNumPlayersAlive($game_id){
     global $sqlcon;
     $retval=0;
@@ -270,7 +348,7 @@ function PlayersInQueue($game_id, $public){
     try {
         $query = 'SELECT COUNT(*) as Total FROM GameQueue
                   WHERE game_id_f='.(int)$game_id.'
-                      AND public='.(bool)$public;
+                      AND public='.(int)$public;
 
         if (!$result = $sqlcon->query($query)){
             echo "error counting queue!";
@@ -279,8 +357,6 @@ function PlayersInQueue($game_id, $public){
             $data=$result->fetch_assoc();
             $numInQueue=$data['Total'];
         }
-        /* close statement and connection */
-        $result->close();
 
 
     }//end try
@@ -303,7 +379,7 @@ function convertPlayersToGame($game_id, $user_id, $public) {
         $result = $sqlcon->query($query);
         $query = 'SELECT gamequeue_id, user_id_f FROM GameQueue
                   WHERE game_id_f='.(int)$game_id.'
-                      AND public='.(bool)$public.'
+                      AND public='.(int)$public.'
                       AND user_id_f <> '.(int)$user_id.'
                       ORDER BY created ASC
                       LIMIT '.((int)$maxplayers-1);
@@ -321,7 +397,7 @@ function convertPlayersToGame($game_id, $user_id, $public) {
             //Add queueid / userid of current user
             $query = 'SELECT gamequeue_id, user_id_f FROM GameQueue
                       WHERE game_id_f='.(int)$game_id.'
-                      AND public='.(bool)$public.'
+                      AND public='.(int)$public.'
                       AND user_id_f = '.(int)$user_id.'
                       ORDER BY created ASC
                       LIMIT 1';
@@ -359,6 +435,10 @@ function convertPlayersToGame($game_id, $user_id, $public) {
                       (creator_id_f) VALUES (0);';
                 $sqlcon->query($query);
                 $game_id = $sqlcon->insert_id;
+            }else{
+                // if this is a private game, go ahead and clear out the code since it won't be used anymore
+                $query = 'UPDATE Games SET Game_Code = NULL WHERE game_id = '.(int)$game_id;
+                $sqlcon->query($query);
             }
 
             // Add Players from array to the game and unlock the table

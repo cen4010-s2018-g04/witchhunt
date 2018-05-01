@@ -51,9 +51,9 @@ $(document).ready(function ($) {
     });
 
     $('#joinPrivateGame').click(function() {
-        alert("join private game");
         // SHow textbox to enter private game name
-
+        url = "joinPrivateGame.php";
+        $(location).attr("href", url);
 
 
 
@@ -65,9 +65,8 @@ $(document).ready(function ($) {
             {},
             function(response, status) {
                 // handle callback
-                alert(response);
                 if (response=='0') {
-                    // If not in queue, add to queue
+                    // If not in queue, go to create private game
                     url = "privateGame.php";
                     $(location).attr("href", url);
                 }else{
@@ -172,7 +171,6 @@ $(document).ready(function ($) {
                 numArray=response.split(",");
                 numinQueue=numArray[0];
                 minplay=numArray[1];
-
                 if (numinQueue >= minplay){
                     // We have enough players
                     // get max number of players from queue and add to array

@@ -32,10 +32,16 @@ require_once './includes/logged_in.php';
         }else{
             echo '<button class="btn" id="newPublicGame">Join a Public Game</button>';
         }
-        ?>
-        <br />
-        <button class="btn" id="joinPrivateGame">Join a Private Game</button><br />
-        <button class="btn" id="newPrivateGame">Create a Private Game</button><br />
+
+        echo "<br />";
+        $inPrivate=isPlayerInQueue(0, $user_id, false);
+        if ((int)$inPrivate>0) {
+            echo '<button class="btn" id="newPrivateGame">Wait in your Private Queue</button>';
+        }else{
+            echo '<button class="btn" id="joinPrivateGame">Join a Private Game</button><br />';
+            echo '<button class="btn" id="newPrivateGame">Create a Private Game</button><br />';
+        }?>
+
     <?php
     }else{
         echo '<h3>You are already joined to a current game.</h3>';
